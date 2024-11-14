@@ -26,7 +26,7 @@ public class WeaponPickup : MonoBehaviour
             // Menempatkan weapon sebagai child dari pickup dan mengatur posisinya
             weapon.transform.SetParent(transform, false);
             weapon.transform.localPosition = Vector3.zero; // Menetapkan posisi pada pickup
-            weapon.parentTransform = transform; // Menyimpan parent asli
+            
         }
     }
 
