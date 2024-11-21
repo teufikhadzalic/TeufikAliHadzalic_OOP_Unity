@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float shootIntervalInSeconds = 3f;
 
     [Header("Bullets")]
-    [SerializeField] private Bullet bulletPrefab; // Prefab peluru
+    [SerializeField] public Bullet bulletPrefab; // Prefab peluru
     [SerializeField] private Transform bulletSpawnPoint; // Posisi spawn peluru
 
     [Header("Bullet Pool")]
@@ -59,6 +59,8 @@ public class Weapon : MonoBehaviour
         bullet.transform.rotation = bulletSpawnPoint.rotation;
     }
 
+    
+
     private void OnReleaseBullet(Bullet bullet)
     {
         // Nonaktifkan bullet saat dikembalikan ke pool
@@ -75,6 +77,7 @@ public class Weapon : MonoBehaviour
     {
         Bullet spawnedBullet = bulletPool.Get();
         // Mengatur arah dan kecepatan bullet
+        spawnedBullet.owner = gameObject;
         Rigidbody2D rb = spawnedBullet.GetComponent<Rigidbody2D>();
         if (rb != null)
         {

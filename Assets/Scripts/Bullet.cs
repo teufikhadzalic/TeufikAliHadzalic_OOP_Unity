@@ -4,8 +4,12 @@ using UnityEngine.Pool;
 public class Bullet : MonoBehaviour
 {
     public float bulletSpeed = 20f; // Kecepatan bullet
+    public int damage = 10; // Damage bullet
     private IObjectPool<Bullet> pool;
-    public int damage = 10;
+
+    // Properti owner
+    public GameObject owner;
+
     public void SetPool(IObjectPool<Bullet> objectPool)
     {
         pool = objectPool;
@@ -13,7 +17,7 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        // Mengatur kecepatan peluru saat aktif
+        // Atur kecepatan peluru saat aktif
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -23,27 +27,34 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Kembalikan bullet ke pool saat bertabrakan
+        // Abaikan jika peluru mengenai owner
+        if (collision.gameObject == owner)
+        {
+            return;
+        }
+
+        // Jika mengenai objek lain, proses damage
+        var hitbox = collision.gameObject.GetComponent<HitboxComponent>();
+        if (hitbox != null)
+        {
+            hitbox.Damage(damage);
+        }
+
+        // Kembalikan peluru ke pool
         if (pool != null)
         {
             pool.Release(this);
-        }
-        else
-        {
-           // Destroy(gameObject);
         }
     }
 
+    
+
     private void OnBecameInvisible()
     {
-        // Kembalikan bullet ke pool saat keluar layar
+        // Kembalikan peluru ke pool saat keluar layar
         if (pool != null)
         {
             pool.Release(this);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 }

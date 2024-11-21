@@ -5,7 +5,9 @@ public class EnemyHorizontal : Enemy
     private float speed = 3f;
     private Vector2 moveDirection;
     private float verticalOffset = 1.0f; // Offset vertikal untuk spawn lebih tinggi di layar
-
+    private InvincibilityComponent invincibilityComponent; 
+    private AttackComponent attackComponent;
+    
     protected override void Start()
     {
         base.Start();
@@ -36,8 +38,11 @@ public class EnemyHorizontal : Enemy
 
     private void Update()
     {
-        // Gerakkan musuh secara horizontal
+        // Movement musuh secara horizontal
         transform.Translate(moveDirection * speed * Time.deltaTime);
+
+        // Pastikan rotasi tetap horizontal
+        transform.rotation = Quaternion.identity;
 
         // Periksa jika musuh melewati tepi layar, lalu balikkan arah
         float screenEdge = Camera.main.orthographicSize * Camera.main.aspect;

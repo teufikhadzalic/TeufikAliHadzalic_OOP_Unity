@@ -8,8 +8,8 @@ public class EnemyBoss : Enemy
     private Vector3 spawnPoint;
     private AttackComponent attackComponent;
     
-    void Start()
-    {   
+     protected override void Start()
+    {   base.Start();
          attackComponent = GetComponent<AttackComponent>();
         Vector3 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
         
@@ -53,11 +53,16 @@ public class EnemyBoss : Enemy
         Shoot();
     }
 
-    void Shoot()
+   void Shoot()
     {
         if (weapon != null)
         {
-            weapon.Shoot(); // Gunakan metode untuk menembak pada komponen weapon
+            // Panggil Shoot() dan tetapkan owner pada Bullet
+            weapon.Shoot();
+
+            // Akses bullet yang baru dibuat dari Weapon
+            var lastBullet = weapon.bulletPrefab;
+            lastBullet.owner = gameObject; // Tetapkan EnemyBoss sebagai owner
         }
     }
 }

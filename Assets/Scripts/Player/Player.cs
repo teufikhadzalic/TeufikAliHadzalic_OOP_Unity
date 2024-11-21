@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     
     private PlayerMovement playerMovement;
     private Animator animator;
+    
 
     public Weapon CurrentWeapon { get; private set; } // Senjata yang saat ini dipegang oleh pemain
 

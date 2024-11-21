@@ -2,43 +2,45 @@ using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class HitboxComponent : MonoBehaviour
- {
-    private HealthComponent health;
-    private InvincibilityComponent invincibilityComponent;
+{
+    [SerializeField] private HealthComponent health;
 
-    void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        health = GetComponent<HealthComponent>();
-        invincibilityComponent = GetComponent<InvincibilityComponent>();
-        if (health == null)
+        // Cek apakah objek yang mengenai adalah Bullet
+        if (other.CompareTag("Bullet"))
         {
-            Debug.LogError("HealthComponent is required on the same GameObject.");
-        }
-    }
-
-    public void Damage(Bullet bullet)
-    {
-        if (invincibilityComponent == null || !invincibilityComponent.isInvincible)
-        {
-            if (health != null)
+            Bullet bullet = other.GetComponent<Bullet>();
+            if (bullet != null)
             {
-                health.Subtract(bullet.damage);
-                invincibilityComponent.StartInvincibility();
-                Debug.Log("Player took " + bullet.damage + " damage from bullet.");
+                Damage(bullet);
             }
         }
     }
 
-    public void Damage(int damage)
+    public void Damage(int damageAmount)
     {
-        if (invincibilityComponent == null || !invincibilityComponent.isInvincible)
+        var invincibility = GetComponent<InvincibilityComponent>();
+
+        if (invincibility == null || !invincibility.isInvincible)
         {
-            if (health != null)
+            health.Subtract(damageAmount);
+        }
+    }
+
+   public void Damage(Bullet bullet)
+    {
+        var invincibility = GetComponent<InvincibilityComponent>();
+
+        // Hanya kurangi health jika tidak sedang invincible
+        if (invincibility == null || !invincibility.isInvincible)
+        {
+            
+            health.Subtract(bullet.damage);
+            if (invincibility != null)
             {
-                health.Subtract(damage);
-                invincibilityComponent.StartInvincibility();
-                Debug.Log("Player took " + damage + " damage.");
+                invincibility.StartInvincibility();
             }
         }
     }
- }
+}
