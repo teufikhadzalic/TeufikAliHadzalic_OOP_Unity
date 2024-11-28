@@ -1,5 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Prefabs")]
@@ -21,46 +23,71 @@ public class EnemySpawner : MonoBehaviour
 
     public bool isSpawning = false;
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        spawnCount = defaultSpawnCount;
+        spawnCount = defaultSpawnCount; // Inisialisasi jumlah spawn default
     }
 
-    public void StartSpawning()
+    public void stopSpawning()
     {
-        isSpawning = true;
-        StartCoroutine(SpawnEnemies());
+        isSpawning = false; // Menghentikan proses spawning
     }
 
-    public void StopSpawning()
+    public void startSpawning()
     {
-        isSpawning = false;
-        StopCoroutine(SpawnEnemies());
-    }
-
-    private IEnumerator SpawnEnemies()
-    {
-        while (isSpawning)
+        if (spawnedEnemy.level <= combatManager.waveNumber)
         {
-            for (int i = 0; i < spawnCount; i++)
-            {
-                Instantiate(spawnedEnemy, transform.position, Quaternion.identity);
-                combatManager.totalEnemies++;
-            }
-
-            yield return new WaitForSeconds(spawnInterval);
+            isSpawning = true;
+            StartCoroutine(SpawnEnemies());
         }
     }
 
-    public void OnEnemyKilled()
+    public IEnumerator SpawnEnemies()
     {
-        totalKill++;
-        totalKillWave++;
-
-        if (totalKillWave >= minimumKillsToIncreaseSpawnCount)
+        if (isSpawning)
         {
-            totalKillWave = 0;
-            spawnCount += spawnCountMultiplier;
+            if (spawnCount == 0)
+            {
+                spawnCount = defaultSpawnCount;
+            }
+            int i = spawnCount;
+            while (i > 0)
+            {
+                Enemy enemy = Instantiate(spawnedEnemy); // Spawn enemy
+                enemy.GetComponent<Enemy>().enemySpawner = this; // Hubungkan enemy dengan spawnernya
+                enemy.GetComponent<Enemy>().combatManager = combatManager; // Hubungkan dengan CombatManager
+                --i;
+                spawnCount = i;
+
+                if (combatManager != null)
+                {
+                    combatManager.totalEnemies++; // Update totalEnemies di CombatManager
+                    combatManager.UpdateUI(); // Perbarui UI jumlah musuh
+                }
+
+                yield return new WaitForSeconds(spawnInterval); // Tunggu sebelum spawn berikutnya
+            }
+        }
+    }
+
+    public void onDeath()
+    {
+        Debug.Log("Enemy Killed");
+        // Panggil metode ini saat musuh terbunuh
+        totalKill++;
+        ++totalKillWave;
+        Debug.Log(totalKillWave);
+
+        // Cek apakah totalKillWave mencapai minimum untuk meningkatkan spawn count
+        if (totalKillWave == minimumKillsToIncreaseSpawnCount)
+        {
+            Debug.Log("Increasing spawn count");
+            totalKillWave = 0; // Reset totalKillWave untuk wave baru
+            defaultSpawnCount *= spawnCountMultiplier; // Tingkatkan defaultSpawnCount
+            if (spawnCountMultiplier < 3)
+                spawnCountMultiplier += multiplierIncreaseCount; // Tingkatkan multiplier
+            spawnCount = defaultSpawnCount; // Perbarui spawnCount
         }
     }
 }

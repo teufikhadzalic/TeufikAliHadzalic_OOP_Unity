@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement name="Container" style="flex-grow: 1;">
+            <ui:Label tabindex="-1" text="Health&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="healthText" style="width: 56px; -unity-font-style: bold; -unity-text-outline-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255); font-size: 7px; position: absolute;" />
+            <ui:Label tabindex="-1" text="Points&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="pointsText" style="width: 100px; -unity-font-style: bold; -unity-text-outline-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255); font-size: 7px; position: absolute; top: 23px; left: 2px;" />
+            <ui:Label tabindex="-1" text="Wave" parse-escape-sequences="true" display-tooltip-when-elided="true" name="waveText" style="white-space: nowrap; height: -8px; width: 68px; -unity-text-align: upper-left; position: absolute; top: 0; left: 277px; color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 7px;" />
+            <ui:Label tabindex="-1" text="Enemies left" parse-escape-sequences="true" display-tooltip-when-elided="true" name="enemiesText" style="position: absolute; top: 21px; left: 278px; color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 7px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

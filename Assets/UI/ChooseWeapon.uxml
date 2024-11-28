@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; align-self: auto; justify-content: flex-end;">
+        <ui:VisualElement name="Container" style="flex-grow: 1;">
+            <ui:Label tabindex="-1" text="Spacebandit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" enable-rich-text="true" style="white-space: normal; -unity-font: url(&quot;project://database/Library/unity%20default%20resources?fileID=10102&amp;guid=0000000000000000e000000000000000&amp;type=0#LegacyRuntime&quot;); -unity-font-style: bold; color: rgb(237, 0, 0); height: 22px; -unity-text-align: upper-center; position: relative; -unity-text-outline-color: rgba(0, 0, 0, 0); -unity-text-outline-width: 0; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected int level = 1; // Level dari enemy, bisa diatur di Inspector
+    [SerializeField] public int level = 1; // Level dari enemy, bisa diatur di Inspector
     protected Rigidbody2D rb;
     protected Transform player;
+
+    public EnemySpawner enemySpawner;
+    
+    public CombatManager combatManager;
 
     protected virtual void Awake()
     {
@@ -17,7 +21,14 @@ public class Enemy : MonoBehaviour
     {
         FacePlayer();
     }
-
+      private void OnDestroy()
+    {
+        if (enemySpawner != null && combatManager != null)
+        {
+            enemySpawner.onDeath();
+            combatManager.onDeath(this); // Pass the enemy instance to onDeath
+        }
+    }
     protected void FacePlayer()
     {
         if (player != null)

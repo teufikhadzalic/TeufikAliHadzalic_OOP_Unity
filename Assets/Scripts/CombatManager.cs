@@ -1,53 +1,68 @@
 using UnityEngine;
+using System.Collections;
 
 public class CombatManager : MonoBehaviour
 {
     public EnemySpawner[] enemySpawners;
     public float timer = 0;
     [SerializeField] private float waveInterval = 5f;
-    public int waveNumber = 1;
+    public int waveNumber = 0;
     public int totalEnemies = 0;
 
-    private void Start()
-    {
-        foreach (var spawner in enemySpawners)
-        {
-            spawner.combatManager = this;
-        }
+    [Header("UI References")]
+    [SerializeField] private UnityEngine.UI.Text waveText;
+    [SerializeField] private UnityEngine.UI.Text enemiesText;
+    [SerializeField] private UnityEngine.UI.Text pointsText;
 
-        StartWave();
+    private int points = 0;
+
+    void Start()
+    {
+        waveNumber = 0;
+        foreach (EnemySpawner enemySpawner in enemySpawners)
+        {
+            enemySpawner.combatManager = this;
+        }
+        UpdateUI();
     }
 
-    private void Update()
+    void Update()
     {
-        timer += Time.deltaTime;
-
-        if (timer >= waveInterval && totalEnemies <= 0)
-        {
-            timer = 0;
-            waveNumber++;
-            StartWave();
-        }
-    }
-
-    private void StartWave()
-    {
-        foreach (var spawner in enemySpawners)
-        {
-            spawner.StartSpawning();
-        }
-    }
-
-    public void OnEnemyKilled()
-    {
-        totalEnemies--;
-
         if (totalEnemies <= 0)
         {
-            foreach (var spawner in enemySpawners)
+            timer += Time.deltaTime;
+            if (timer >= waveInterval)
             {
-                spawner.StopSpawning();
+                timer = 0;
+                StartNextWave();
             }
         }
+    }
+
+    private void StartNextWave()
+    {
+        timer = 0;
+        waveNumber++;
+        UpdateUI();
+
+        foreach (EnemySpawner enemySpawner in enemySpawners)
+        {
+            enemySpawner.startSpawning();
+        }
+    }
+
+    public void onDeath(Enemy enemy)
+    {
+        totalEnemies--;
+        points += enemy.level; // Tambahkan poin berdasarkan level musuh
+        UpdateUI();
+    }
+
+    // Ubah metode ini menjadi public agar dapat diakses dari EnemySpawner
+    public void UpdateUI()
+    {
+        waveText.text = "Wave: " + waveNumber;
+        enemiesText.text = "Enemies: " + totalEnemies;
+        pointsText.text = "Points: " + points;
     }
 }

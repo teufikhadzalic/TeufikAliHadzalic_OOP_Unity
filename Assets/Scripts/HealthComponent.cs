@@ -5,7 +5,7 @@ public class HealthComponent : MonoBehaviour
     [SerializeField] private int maxHealth = 100;
     private int health;
 
-    void Awake()
+    void Start()
     {
         health = maxHealth;
     }
@@ -15,9 +15,9 @@ public class HealthComponent : MonoBehaviour
         return health;
     }
 
-    public void Subtract(int amount)
+    public void Subtract(int damage)
     {
-        health -= amount;
+        health -= damage;
         if (health <= 0)
         {
             Destroy(gameObject);
